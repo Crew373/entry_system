@@ -5,6 +5,7 @@
 - Python 3.7.3
 - nfcpy
 - LINE Notify API
+- Raspberry Pi 3
 
 ## Installation
 - pip3
