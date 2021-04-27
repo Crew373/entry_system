@@ -1,11 +1,12 @@
-import requests
 import datetime
-import binascii
-import nfc
 import time
+
+import nfc
+import requests
 
 # 学生証のサービスコード
 service_code = 0x120B
+
 
 # LINENotifyのBot
 class LINENotifyBot:
@@ -21,7 +22,8 @@ class LINENotifyBot:
             LINENotifyBot.API_URL,
             headers=self.__headers,
             data=payload,
-            )
+        )
+
 
 # 学生番号の読み取り
 def on_connect_nfc(tag):
@@ -29,7 +31,7 @@ def on_connect_nfc(tag):
         try:
             sc = nfc.tag.tt3.ServiceCode(service_code >> 6, service_code & 0x3f)
             bc = nfc.tag.tt3.BlockCode(0, service=0)
-            data = tag.read_without_encryption([sc],[bc])
+            data = tag.read_without_encryption([sc], [bc])
             sid = data[0:8].decode()
             global student_id
             student_id = sid
@@ -42,7 +44,7 @@ def on_connect_nfc(tag):
 def main():
     students = []
     clf = nfc.ContactlessFrontend('usb')
-    
+
     while True:
         dt_now = datetime.datetime.now()
         clf.connect(rdwr={'on-connect': on_connect_nfc})
@@ -53,13 +55,14 @@ def main():
         else:
             info = "入室しました"
             students.append(student_id)
-	# XXXXの部分は取得したAPI keyを貼り付けてください
-        bot = LINENotifyBot(access_token= 'XXXX')
-        bot.send(message = student_id + info)
+        # XXXXの部分は取得したAPI keyを貼り付けてください
+        bot = LINENotifyBot(access_token='XXXX')
+        bot.send(message=student_id + info)
 
         print(dt_now)
         print(student_id + info)
         time.sleep(5)
+
 
 if __name__ == "__main__":
     main()
