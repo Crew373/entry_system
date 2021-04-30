@@ -1,3 +1,4 @@
+import binascii
 import dataclasses
 import datetime
 import time
@@ -108,13 +109,15 @@ class LINENotifyBot:
 
 # 学生番号の読み取り
 def on_connect_nfc(tag):
+    global global_student_id
+
+    global_student_id = None
     if isinstance(tag, nfc.tag.tt3.Type3Tag):
         try:
             sc = nfc.tag.tt3.ServiceCode(service_code >> 6, service_code & 0x3f)
             bc = nfc.tag.tt3.BlockCode(0, service=0)
             data = tag.read_without_encryption([sc], [bc])
             sid = data[0:8].decode()
-            global global_student_id
             global_student_id = sid
         except Exception as e:
             print("error: %s" % e)
@@ -128,7 +131,12 @@ def main():
 
     while True:
         dt_now = datetime.datetime.now()
-        clf.connect(rdwr={'on-connect': on_connect_nfc})
+        clf.connect(rdwr={
+            'targets': ['212F', '424F'],
+            'on-connect': on_connect_nfc
+        })
+        if global_student_id is None:
+            continue
 
         event = api_client.get_event(global_student_id)
 
