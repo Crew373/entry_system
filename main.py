@@ -34,6 +34,14 @@ def parse_event(source):
 
 @dataclasses_json.dataclass_json
 @dataclasses.dataclass
+class Member:
+    student_id: str
+    alias_id: str
+    name: str
+
+
+@dataclasses_json.dataclass_json
+@dataclasses.dataclass
 class Access:
     student_id: str
     event: str
@@ -80,6 +88,17 @@ class MemberRegisterApiClient:
 
         return parse_event(access.event)
 
+    def get_student_id(self, idm):
+        if idm is None:
+            return None
+
+        uri = self.__base_uri + '/members/' + idm
+
+        (header, content) = self.__client.request(uri, "GET")
+        member = Member.from_json(content)
+
+        return member.student_id
+
     def __take_log(self, access):
         uri = self.__base_uri + '/logs'
         raw_date = datetime.datetime.now()
@@ -110,8 +129,11 @@ class LINENotifyBot:
 # 学生番号の読み取り
 def on_connect_nfc(tag):
     global global_student_id
+    global global_idm
 
     global_student_id = None
+    global_idm = ("%s" % (binascii.hexlify(tag.idm)))[2:-1]
+    print("idm ", global_idm)
     if isinstance(tag, nfc.tag.tt3.Type3Tag):
         try:
             sc = nfc.tag.tt3.ServiceCode(service_code >> 6, service_code & 0x3f)
@@ -135,16 +157,20 @@ def main():
             'targets': ['212F', '424F'],
             'on-connect': on_connect_nfc
         })
-        if global_student_id is None:
+
+        student_id = global_student_id
+        idm = global_idm
+        student_id = api_client.get_student_id(idm) if student_id is None else student_id
+        if student_id is None:
             continue
 
-        event = api_client.get_event(global_student_id)
+        event = api_client.get_event(student_id)
 
         if event == Register or event == Exit:
-            api_client.entry(global_student_id)
+            api_client.entry(student_id)
             info = "入室しました"
         elif event == Entry:
-            api_client.exit(global_student_id)
+            api_client.exit(student_id)
             info = "退室しました"
         else:
             return
@@ -154,7 +180,7 @@ def main():
         # bot.send(message=student_id + info)
 
         print(dt_now)
-        print(global_student_id + info)
+        print(student_id + info)
         time.sleep(2)
 
 
