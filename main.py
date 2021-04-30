@@ -1,6 +1,7 @@
 import binascii
 import dataclasses
 import datetime
+import json
 import time
 
 import dataclasses_json
@@ -95,8 +96,10 @@ class MemberRegisterApiClient:
         uri = self.__base_uri + '/members/' + idm
 
         (header, content) = self.__client.request(uri, "GET")
-        member = Member.from_json(content)
+        if json.loads(content) is None:
+            return None
 
+        member = Member.from_json(content)
         return member.student_id
 
     def __take_log(self, access):
