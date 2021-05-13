@@ -9,7 +9,8 @@ import httplib2
 import nfc
 import requests
 
-# 学生証のサービスコード
+from access_token import AT
+
 service_code = 0x120B
 
 
@@ -178,9 +179,9 @@ def main():
         else:
             return
 
-        # # XXXXの部分は取得したAPI keyを貼り付けてください
-        # bot = LINENotifyBot(access_token='XXXX')
-        # bot.send(message=student_id + info)
+        # XXXXの部分は取得したAPI keyを貼り付けてください
+        bot = LINENotifyBot(AT)
+        bot.send(message=student_id + info)
 
         print(dt_now)
         print(student_id + info)
