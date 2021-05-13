@@ -3,6 +3,7 @@ import datetime
 import binascii
 import nfc
 import time
+from access_token import AT
 
 # 学生証のサービスコード
 service_code = 0x120B
@@ -53,9 +54,14 @@ def main():
         else:
             info = "入室しました"
             students.append(student_id)
+
 	# XXXXの部分は取得したAPI keyを貼り付けてください
-        bot = LINENotifyBot(access_token= 'XXXX')
+        bot = LINENotifyBot(AT)
         bot.send(message = student_id + info)
+
+        with open("log.txt", "a") as f:
+            f.write(dt_now + student_id + info)
+
 
         print(dt_now)
         print(student_id + info)
