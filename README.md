@@ -6,6 +6,7 @@
 - nfcpy
 - LINE Notify API
 - Raspberry Pi 3
+- PaSoRi RC-S380
 
 ## Installation
 - pip3
