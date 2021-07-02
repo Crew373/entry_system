@@ -27,3 +27,8 @@ sudo pip3 install nfcpy
 ```bash
 sudo python3 main.py
 ```
+
+- startup from ssh
+```bash
+nohup sudo python3 main.py
+```
