@@ -8,8 +8,6 @@ import nfc
 # 学生証のサービスコード
 service_code = 0x120B
 
-
-
 # LINENotifyのBot
 class LINENotifyBot:
     API_URL = 'https://notify-api.line.me/api/notify'
@@ -44,7 +42,6 @@ def on_connect_nfc(tag):
 
 
 def main():
-
     students = []
     clf = nfc.ContactlessFrontend('usb')
     
