@@ -6,7 +6,6 @@
 - nfcpy
 - LINE Notify API
 - Raspberry Pi 3
-- PaSoRi RC-S380
 
 ## Installation
 - pip3
@@ -26,9 +25,4 @@ sudo pip3 install nfcpy
 - terminal
 ```bash
 sudo python3 main.py
-```
-
-- startup from ssh
-```bash
-nohup sudo python3 main.py
 ```
