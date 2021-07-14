@@ -1,6 +1,5 @@
 import datetime
 import time
-from access_token import AT
 
 import nfc
 
@@ -59,10 +58,6 @@ def main():
 	# XXXXの部分は取得したAPI keyを貼り付けてください
         bot = LINENotifyBot(AT)
         bot.send(message = student_id + info)
-
-        with open("log.txt", "a") as f:
-            f.write(dt_now + student_id + info)
-
 
         print(dt_now)
         print(student_id + info)
