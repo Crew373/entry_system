@@ -4,7 +4,6 @@
 ## Requirement
 - Python 3.7.3
 - nfcpy
-- LINE Notify API
 - Raspberry Pi 3
 
 ## Installation
@@ -18,8 +17,6 @@ sudo apt install python3-pip
 sudo pip3 install nfcpy
 ```
 
-- LINE Notify APIは以下からログインし、API keyを取得してください。
-	- [LINE Notify](https://notify-bot.line.me/ja/)
 
 ## Usage
 - terminal
