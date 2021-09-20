@@ -29,22 +29,21 @@ def on_connect_nfc(tag):
 
 def main():
     clf = nfc.ContactlessFrontend('usb')
-    url = (base_url + "/:" + student_id)
-    res = requests.get(url)
-
-    lists = json.loads(res.text)
-
-    for list in lists:
-        print(list)
+    url = (base_url + "/" + student_id)
 
     while True:
         clf.connect(rdwr={'on-connect': on_connect_nfc})
 
-        res = requests.get(url)
-        lists = json.loads(res.text)
+        if not student_id is None:
+            res = requests.get(url)
+            lists = json.loads(res.text)
 
-        for list in lists:
-            print(list)
+            if lists['event'] == 'in':
+                requests.put(url, params={'Event': 'out'})
+            elif lists['event'] == 'out':
+                requests.put(url, params={'Event': 'in'})
+            else:
+                return
 
         time.sleep(5)
 
